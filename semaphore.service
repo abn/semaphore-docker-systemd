@@ -1,0 +1,23 @@
+[Unit]
+Description=Castaway Labs Semaphore Service
+After=semaphore.redis.service
+Requires=semaphore.redis.service
+After=semaphore.mongo.service
+Requires=semaphore.mongo.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull castawaylabs/semaphore
+ExecStart=/usr/bin/docker run --rm --name %n \
+  --link semaphore.redis.service:redis \
+  --link semaphore.mongo.service:mongo \
+  -e MONGODB_URL=mongodb://mongo/semaphore \
+  -e REDIS_HOST=redis \
+  -p 80:80 \
+  castawaylabs/semaphore
+
+[Install]
+WantedBy=multi-user.target
