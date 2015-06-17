@@ -13,7 +13,7 @@ Source1:        semaphore.redis.service
 Source2:        semaphore.mongo.service
 
 BuildRequires:	systemd-units
-Requires:	    systemd coreutils
+Requires:	    systemd coreutils docker
 
 %description
 systemd wrapper
